@@ -19,13 +19,12 @@ public class TDView extends SurfaceView implements Runnable {
     private Canvas canvas;
     private SurfaceHolder ourHolder;
 
-    public TDView(Context context) {
+    public TDView(Context context, int x, int y) {
         super(context);
         //Initialize our drawing objects
         ourHolder = getHolder();
         paint = new Paint();
-
-        player = new PlayerShip(context);
+        player = new PlayerShip(context, x, y);
     }
 
     @Override
@@ -69,12 +68,12 @@ public class TDView extends SurfaceView implements Runnable {
         switch(motionEvent.getAction() & MotionEvent.ACTION_MASK){
         //has the player lifted their finger up?
         case MotionEvent.ACTION_UP:
-        //do something
+        player.stopBoosting();
         break;
 
         //has the player touched the screen?
         case MotionEvent.ACTION_DOWN:
-        //do something
+        player.setBoosting();
         break;
         }
         return true;
