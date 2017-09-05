@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 public class PlayerShip {
+    private int shieldStrength;
     //hitbox for collision detection
     private Rect hitBox;
 
@@ -28,9 +29,9 @@ public class PlayerShip {
     private final int MIN_SPEED = 1;
     private final int MAX_SPEED = 20;
 
-/* What PlayerShip needs to Do:
-  Prepare itself(in a constructor), update itself(update method), share it's state with our view(Getters)
-*/
+    /* What PlayerShip needs to Do:
+      Prepare itself(in a constructor), update itself(update method), share it's state with our view(Getters)
+    */
 
     //constructor
     public PlayerShip(Context context, int screenX, int screenY){
@@ -43,8 +44,9 @@ public class PlayerShip {
         minY = 0;
         //initialize hitbox
         hitBox = new  Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        shieldStrength=2;
     }
-
+    //update method
     public void update(){
         //are we boosting?
         if(boosting){
@@ -83,33 +85,34 @@ public class PlayerShip {
         hitBox.right = x + bitmap.getWidth();
         hitBox.bottom = y + bitmap.getHeight();
     }
-
     //getters
     public Bitmap getBitmap(){
         return bitmap;
     }
-
     public int getSpeed(){
         return speed;
     }
     public int getX(){
         return x;
     }
-
     public int getY(){
         return y;
     }
-
     public Rect getHitBox(){
         return hitBox;
     }
-
+    public int getShieldStrength(){
+        return shieldStrength;
+    }
     //to boost or not
     public void setBoosting(){
         boosting = true;
     }
-
     public void stopBoosting(){
         boosting = false;
+    }
+    //reduce shield strength
+    public void reduceShieldStrength(){
+        shieldStrength --;
     }
 }
