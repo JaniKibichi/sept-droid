@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mjuaji.memorygame.GameActivity">
+
+    <TextView
+        android:id="@+id/textScore"
+        android:layout_width="136dp"
+        android:layout_height="48dp"
+        android:text="Score: 999"
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="124dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/textDifficulty"
+        android:layout_width="105dp"
+        android:layout_height="40dp"
+        android:text="Difficulty: 4"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="62dp" />
+
+    <TextView
+        android:id="@+id/textWatchGo"
+        android:layout_width="105dp"
+        android:layout_height="40dp"
+        android:text="Watch/Go"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="120dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:text="1"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="185dp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:text="2"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="248dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:text="3"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="313dp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:text="4"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="374dp" />
+
+    <Button
+        android:id="@+id/buttonReplay"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:text="Replay!"
+        tools:layout_editor_absoluteX="265dp"
+        tools:layout_editor_absoluteY="462dp" />
+</android.support.constraint.ConstraintLayout>
