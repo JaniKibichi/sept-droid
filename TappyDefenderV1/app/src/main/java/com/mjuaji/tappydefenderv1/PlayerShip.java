@@ -3,8 +3,11 @@ package com.mjuaji.tappydefenderv1;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 public class PlayerShip {
+    //hitbox for collision detection
+    private Rect hitBox;
 
 /*PlayerShip class should:
    Know where it is on screen,  Know what it looks like,  Know how fast it is flying
@@ -38,6 +41,8 @@ public class PlayerShip {
         boosting = false;
         maxY =screenY - bitmap.getHeight();
         minY = 0;
+        //initialize hitbox
+        hitBox = new  Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public void update(){
@@ -71,6 +76,12 @@ public class PlayerShip {
         if(y<maxY){
             y = maxY;
         }
+
+        //refresh  hit box location in update
+        hitBox.left = x;
+        hitBox.top = y;
+        hitBox.right = x + bitmap.getWidth();
+        hitBox.bottom = y + bitmap.getHeight();
     }
 
     //getters
@@ -87,6 +98,10 @@ public class PlayerShip {
 
     public int getY(){
         return y;
+    }
+
+    public Rect getHitBox(){
+        return hitBox;
     }
 
     //to boost or not

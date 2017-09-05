@@ -3,10 +3,14 @@ package com.mjuaji.tappydefenderv1;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 import java.util.Random;
 
 public class EnemyShip {
+    //hitbox for collision detection
+    private Rect hitBox;
+
     private Bitmap bitmap;
     private int x, y;
     private int speed =1;
@@ -32,6 +36,15 @@ public class EnemyShip {
         return y;
     }
 
+    public Rect getHitBox(){
+        return hitBox;
+    }
+
+    //make an enemy out of bounds and force re-spawn
+    public void setX(int x){
+        this.x = x;
+    }
+
     //constructor
     //spawn the enemy
     public EnemyShip(Context context, int screenX, int screenY){
@@ -47,6 +60,9 @@ public class EnemyShip {
 
         x = screenX;
         y = generator.nextInt(maxY) - bitmap.getHeight();
+
+        //initialize hitbox
+        hitBox = new  Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
     }
 
     //update
@@ -62,6 +78,12 @@ public class EnemyShip {
             x = maxX;
             y = generator.nextInt(maxY) - bitmap.getHeight();
         }
+
+        //refresh  hit box location in update
+        hitBox.left = x;
+        hitBox.top = y;
+        hitBox.right = x + bitmap.getWidth();
+        hitBox.bottom = y + bitmap.getHeight();
     }
 
 }

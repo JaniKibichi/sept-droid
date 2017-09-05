@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -57,6 +58,16 @@ public class TDView extends SurfaceView implements Runnable {
     }
 
     private void update(){
+        //collision detection on new positions if images in excess of 100 px increase -100 value accordingly
+        if(Rect.intersects(player.getHitBox(), enemy1.getHitBox())){
+                enemy1.setX(-100);
+         }
+        if(Rect.intersects(player.getHitBox(), enemy2.getHitBox())){
+            enemy2.setX(-100);
+        }
+        if(Rect.intersects(player.getHitBox(), enemy3.getHitBox())){
+            enemy3.setX(-100);
+        }
         //update the player
         player.update();
         //update the enemy
@@ -84,7 +95,7 @@ public class TDView extends SurfaceView implements Runnable {
             for (SpaceDust sd : dustList){
                 canvas.drawPoint(sd.getX(), sd.getY(), paint);
             }
-            
+
             //Draw the player
             canvas.drawBitmap(player.getBitmap(),player.getX(), player.getY(), paint);
             //draw our enemies to screen
