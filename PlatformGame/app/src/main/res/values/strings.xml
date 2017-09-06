@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PlatformGame</string>
+    <string name="title_activity_platform">PlatformActivity</string>
+</resources>
