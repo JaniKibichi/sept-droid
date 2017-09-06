@@ -1,17 +1,29 @@
 package com.mjuaji.tappydefenderv1;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TDView extends SurfaceView implements Runnable {
+    private SoundPool soundPool;
+    int start = -1;
+    int bump = -1;
+    int destroyed = -1;
+    int win = -1;
+
     private float distanceRemaining;
     private long timeTaken;
     private long timeStarted;
@@ -40,15 +52,34 @@ public class TDView extends SurfaceView implements Runnable {
     public TDView(Context context, int x, int y) {
         super(context);
         this.context = context;
-
         //Initialize our drawing objects
         ourHolder = getHolder();
         paint = new Paint();
-
         screenX =x;
         screenY=y;
-
         startGame();
+        //load our sounds
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
+        try{
+        //create objects of the 2 required classes
+            AssetManager assetManager = context.getAssets();
+            AssetFileDescriptor descriptor;
+
+        //create our three fx in memory ready for use
+            descriptor = assetManager.openFd("start.ogg");
+            start = soundPool.load(descriptor, 0);
+
+            descriptor = assetManager.openFd("win.ogg");
+            win = soundPool.load(descriptor, 0);
+
+            descriptor = assetManager.openFd("bump.ogg");
+            bump = soundPool.load(descriptor, 0);
+
+            descriptor = assetManager.openFd("destroyed.ogg");
+            destroyed = soundPool.load(descriptor, 0);
+        }catch(IOException e){
+            Log.e("error", "failed to load sound files.");
+        }
     }
     @Override
     public void run(){
@@ -64,7 +95,7 @@ public class TDView extends SurfaceView implements Runnable {
         enemy1 = new EnemyShip(context, screenX, screenY);
         enemy2 = new EnemyShip(context, screenX, screenY);
         enemy3 = new EnemyShip(context, screenX, screenY);
-
+        //load space dust
         int numSpecs = 40;
         for(int i = 0; i<numSpecs; i++){
             //where will the dust spawn?
@@ -75,11 +106,11 @@ public class TDView extends SurfaceView implements Runnable {
         //Reset time and distance
         distanceRemaining = 10000; //10km
         timeTaken =0;
-
         //Get start time
         timeStarted = System.currentTimeMillis();
         //when starting
         gameEnded=false;
+        soundPool.play(start, 1, 1, 0, 0, 1);
     }
     private void update(){
         //collision detection on new positions if images in excess of 100 px increase -100 value accordingly
@@ -100,9 +131,10 @@ public class TDView extends SurfaceView implements Runnable {
 
         //check if hit detected
         if(hitDetected){
+            soundPool.play(bump, 1, 1, 0, 0, 1);
             player.reduceShieldStrength();
             if(player.getShieldStrength()<0){
-                //game over -> do something
+                soundPool.play(destroyed, 1, 1, 0, 0, 1);
                 gameEnded = true;
             }
         }
@@ -130,6 +162,7 @@ public class TDView extends SurfaceView implements Runnable {
 
         //completed the game
         if(distanceRemaining < 0){
+            soundPool.play(win, 1, 1, 0, 0, 1);
             //check for new fastest time
             if(timeTaken < fastestTime){
                 fastestTime = timeTaken;
@@ -210,6 +243,10 @@ public class TDView extends SurfaceView implements Runnable {
         //has the player touched the screen?
         case MotionEvent.ACTION_DOWN:
         player.setBoosting();
+        //if we are on the pause screen, start a new game
+        if(gameEnded){
+           startGame();
+        }
         break;
         }
         return true;
