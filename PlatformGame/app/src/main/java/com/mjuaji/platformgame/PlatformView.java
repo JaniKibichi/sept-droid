@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -49,7 +50,6 @@ public class PlatformView extends SurfaceView implements Runnable {
     private void update(){
         //new update() code will go here
     }
-
     private void draw(){
         if(ourHolder.getSurface().isValid()){
             //first we lock the area of memory we will be drawing to
@@ -62,5 +62,20 @@ public class PlatformView extends SurfaceView implements Runnable {
             //unlock and draw the scene
             ourHolder.unlockCanvasAndPost(canvas);
         }
+    }
+    //clean up thread if game is interrupted
+    public void pause(){
+        running = false;
+        try{
+            gameThread.join();
+        }catch(InterruptedException e){
+            Log.e("error","failed to pause thread");
+        }
+    }
+    //make new thread and start it
+    public void resume(){
+        running = true;
+        gameThread = new Thread(this);
+        gameThread.start();
     }
 }
