@@ -13,6 +13,7 @@ public class PlatformView extends SurfaceView implements Runnable {
     private boolean debugging = true;
     private volatile boolean running;
     private Thread gameThread = null;
+
     //For drawing
     private Paint paint;
     private Canvas canvas;
@@ -21,24 +22,28 @@ public class PlatformView extends SurfaceView implements Runnable {
     long startFrameTime;
     long timeThisFrame;
     long fps;
+
     //new engine classes
     private LevelManager lm;
     private Viewport vp;
     InputController ic;
+    SoundManager sm;
+
     public PlatformView(Context context, int screenWidth, int screenHeight) {
         super(context);
         this.context = context;
-
         //initialize our drawing objects
         ourHolder = getHolder();
         paint = new Paint();
-
         //initialize viewport
         vp = new Viewport(screenWidth, screenHeight);
 
+        sm = new SoundManager();
+        sm.loadSound(context);
         //load the first level
         loadLevel("LevelCave",15,2);
     }
+
     @Override
     public void run() {
         while(running){
