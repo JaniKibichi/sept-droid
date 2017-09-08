@@ -1,6 +1,7 @@
 package com.mjuaji.platformgame;
 
 import android.graphics.Rect;
+import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
@@ -34,4 +35,81 @@ public class InputController {
         currentButtonList.add(pause);
         return currentButtonList;
     }
+
+    public void handleInput(MotionEvent motionEvent, LevelManager l, SoundManager sound, Viewport vp){
+        int pointerCount = motionEvent.getPointerCount();
+        for(int i = 0; i < pointerCount; i++){
+            int x = (int) motionEvent.getX(i);
+            int y = (int) motionEvent.getY(i);
+
+            if(l.isPlaying()){
+                switch(motionEvent.getAction() & MotionEvent.ACTION_MASK){
+                    case MotionEvent.ACTION_DOWN:
+                        if(right.contains(x,y)){
+                            l.player.setPressingRight(true);
+                            l.player.setPressingLeft(false);
+                        }else if (left.contains(x,y)){
+                            l.player.setPressingLeft(true);
+                            l.player.setPressingRight(false);
+                        }else if (jump.contains(x,y)){
+                            l.player.startJump(sound);
+                        }else if (shoot.contains(x,y)){
+
+                        }else if (pause.contains(x,y)){
+                            l.switchPlayingStatus();
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        if(right.contains(x,y)){
+                            l.player.setPressingRight(false);
+                        }else if(left.contains(x,y)){
+                            l.player.setPressingRight(false);
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        if(right.contains(x,y)){
+                            l.player.setPressingRight(true);
+                            l.player.setPressingLeft(false);
+                        }else if(left.contains(x,y)){
+                            l.player.setPressingLeft(true);
+                            l.player.setPressingRight(false);
+                        }else if(jump.contains(x,y)){
+                            l.player.startJump(sound);
+                        }else if(shoot.contains(x,y)){
+
+                        }else if(pause.contains(x,y)){
+                            l.switchPlayingStatus();
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_POINTER_UP:
+                        if(right.contains(x,y)){
+                            l.player.setPressingRight(false);
+                        //Log.w("rightP:", "up");
+                        }else if(left.contains(x,y)){
+                            l.player.setPressingLeft(false);
+                        //Log.w("leftP:", "up");
+                        }else if(shoot.contains(x,y)){
+
+                        }else if(jump.contains(x,y)){
+
+                        }
+                        break;
+                }
+            }else {
+                //not playing, move the viewport around to explore the map
+                switch(motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (pause.contains(x, y)) {
+                            l.switchPlayingStatus();
+                            //Log.w("pause:", "DOWN");
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
 }

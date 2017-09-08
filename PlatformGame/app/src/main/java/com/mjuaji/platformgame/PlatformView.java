@@ -5,10 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.ArrayList;
 
 public class PlatformView extends SurfaceView implements Runnable {
     private boolean debugging = true;
@@ -141,6 +144,23 @@ public class PlatformView extends SurfaceView implements Runnable {
 
                 //for reset the number of clipped objects each frame
                 vp.resetNumClipped();
+            }
+
+            //draw buttons
+            paint.setColor(Color.argb(80,255,255,255));
+            ArrayList<Rect> buttonsToDraw;
+            buttonsToDraw = ic.getButtons();
+
+            for(Rect rect : buttonsToDraw){
+                RectF rf = new RectF(rect.left, rect.top, rect.right, rect.bottom);
+                canvas.drawRoundRect(rf, 15f, 15f, paint);
+            }
+            //draw paused text
+            if(!this.lm.isPlaying()){
+                paint.setTextAlign(Paint.Align.CENTER);
+                paint.setColor(Color.argb(255,255,255,255));
+                paint.setTextSize(120);
+                canvas.drawText("Paused", vp.getScreenWidth()/2, vp.getScreenHeight()/2, paint);
             }
             //unlock and draw the scene
             ourHolder.unlockCanvasAndPost(canvas);
