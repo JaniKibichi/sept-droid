@@ -36,7 +36,7 @@ public class LevelManager{
         loadMapData(context, pixelsPerMetre, px, py);
 
         //ready to play
-        playing = true;
+        //playing = true;
     }
     public boolean isPlaying(){
         return playing;
@@ -121,6 +121,14 @@ public class LevelManager{
                     }
                 }
             }
+        }
+    }
+    public void switchPlayingStatus(){
+        playing = !playing;
+        if(playing){
+            gravity = 6;
+        }else{
+            gravity = 0;
         }
     }
 }

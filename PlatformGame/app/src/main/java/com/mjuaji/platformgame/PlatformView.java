@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -43,7 +44,6 @@ public class PlatformView extends SurfaceView implements Runnable {
         //load the first level
         loadLevel("LevelCave",15,2);
     }
-
     @Override
     public void run() {
         while(running){
@@ -65,11 +65,21 @@ public class PlatformView extends SurfaceView implements Runnable {
                 if(!vp.clipObjects(go.getWorldLocation().x,go.getWorldLocation().y,go.getWidth(),go.getHeight())){
                     //set visible flag to true
                     go.setVisible(true);
+
+                    if(lm.isPlaying()){
+                        //run unclipped updates
+                        go.update(fps, lm.gravity);
+                    }
                 } else {
                     //set visible flag to false so that draw() can ignore them
                     go.setVisible(false);
                 }
             }
+        }
+        //update viewport/frame to remain center of the viewport
+        if(lm.isPlaying()){
+            //reset player location
+            vp.setWorldCentre(lm.gameObjects.get(lm.playerIndex).getWorldLocation().x, lm.gameObjects.get(lm.playerIndex).getWorldLocation().y);
         }
     }
     private void draw(){
@@ -107,6 +117,10 @@ public class PlatformView extends SurfaceView implements Runnable {
                 canvas.drawText("playerX:" + lm.gameObjects.get(lm.playerIndex).getWorldLocation().x, 10, 120, paint);
                 canvas.drawText("playerY:" + lm.gameObjects.get(lm.playerIndex).getWorldLocation().y, 10, 140, paint);
 
+                canvas.drawText("Gravity:" + lm.gravity, 10, 160, paint);
+                canvas.drawText("X velocity:" + lm.gameObjects.get(lm.playerIndex).getxVelocity(), 10, 180, paint);
+                canvas.drawText("Y velocity:" + lm.gameObjects.get(lm.playerIndex).getyVelocity(), 10, 200, paint);
+
                 //for reset the number of clipped objects each frame
                 vp.resetNumClipped();
             }
@@ -138,5 +152,14 @@ public class PlatformView extends SurfaceView implements Runnable {
 
         //set players location as the world centre
         vp.setWorldCentre(lm.gameObjects.get(lm.playerIndex).getWorldLocation().x,lm.gameObjects.get(lm.playerIndex).getWorldLocation().y);
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent motionEvent){
+        switch(motionEvent.getAction() & MotionEvent.ACTION_MASK){
+            case MotionEvent.ACTION_DOWN:
+                lm.switchPlayingStatus();
+                break;
+        }
+        return true;
     }
 }

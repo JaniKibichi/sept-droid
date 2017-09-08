@@ -13,6 +13,65 @@ public abstract class GameObject {
     private int animFrameCount = 1;
     private char type;
     private String bitmapName;
+
+    private float xVelocity;
+    private float yVelocity;
+    final int LEFT = -1;
+    final int RIGHT = -1;
+    private int facing;
+    private boolean moves = false;
+
+    void move(long fps){
+        if(xVelocity !=0){
+            this.worldLocation.x += xVelocity/fps;
+        }
+
+        if(yVelocity !=0){
+            this.worldLocation.y += yVelocity/fps;
+        }
+    }
+    public int getFacing(){
+        return facing;
+    }
+
+    public void setFacing(int facing){
+        this.facing = facing;
+    }
+
+    public float getxVelocity(){
+        return xVelocity;
+    }
+
+    public void setxVelocity(float xVelocity){
+        //only allow for objects that move
+        if(moves){
+            this.xVelocity = xVelocity;
+        }
+    }
+
+    public float getyVelocity(){
+        return yVelocity;
+    }
+
+    public void setyVelocity(float yVelocity){
+        //only allow for objects that move
+        if(moves){
+            this.yVelocity = yVelocity;
+        }
+    }
+
+    public boolean isMoves(){
+        return moves;
+    }
+
+    public void setMoves(boolean moves){
+        this.moves = moves;
+    }
+
+    public void setActive(boolean active){
+        this.active = active;
+    }
+
     public abstract void update(long fps, float gravity);
 
     public String getBitmapName(){
