@@ -1,8 +1,10 @@
 package com.mjuaji.platformgame;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -121,6 +123,23 @@ public class PlatformView extends SurfaceView implements Runnable {
                     //only draw if visible and this layer
                     if(go.isVisible() && go.getWorldLocation().z == layer){
                         toScreen2d.set(vp.worldToScreen(go.getWorldLocation().x,go.getWorldLocation().y,go.getWidth(),go.getHeight()));
+
+                        if(go.isAnimated()){
+                            //get the next frame of the bitmap, rotate if necessary
+                            if(go.getFacing()==1){
+                                Matrix flipper = new Matrix();
+                                flipper.preScale(-1,1);
+                                Rect r = go.getRectToDraw(System.currentTimeMillis());
+                                Bitmap b = Bitmap.createBitmap(lm.bitmapsArray[lm.getBitmapIndex(go.getType())],r.left,r.top,r.width(),r.height(),flipper, true);
+                                canvas.drawBitmap(b, toScreen2d.left,toScreen2d.top,paint);
+                            }else {
+                                //draw the regular way
+                                canvas.drawBitmap(lm.bitmapsArray[lm.getBitmapIndex(go.getType())],go.getRectToDraw(System.currentTimeMillis()),toScreen2d, paint);
+                            }
+                        }else{
+                            //just draw whole bitmap
+                            canvas.drawBitmap(lm.bitmapsArray[lm.getBitmapIndex(go.getType())],toScreen2d.left,toScreen2d.top,paint);
+                        }
                     }
                     //draw the appropriate bitmap
                     canvas.drawBitmap(lm.bitmapsArray[lm.getBitmapIndex(go.getType())],toScreen2d.left, toScreen2d.top, paint);

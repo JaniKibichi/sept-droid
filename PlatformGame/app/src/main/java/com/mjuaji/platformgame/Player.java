@@ -34,6 +34,12 @@ public class Player extends GameObject {
         setType('p');
         //choose bitmap, sprite sheet with multiple frames
         setBitmapName("player");
+        final int ANIMATION_FPS = 16;
+        final int ANIMATION_FRAME_COUNT= 5;
+        //set this object up to be animates
+        setAnimFps(ANIMATION_FPS);
+        setAnimFrameCount(ANIMATION_FRAME_COUNT);
+        setAnimated(context, pixelPerMetre, true);
         //x and y locations from constructor
         setWorldLocation(worldStartX, worldStartY, 0);
         //initialize hitboxes

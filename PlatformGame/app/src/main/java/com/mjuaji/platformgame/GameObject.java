@@ -3,6 +3,7 @@ package com.mjuaji.platformgame;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 public abstract class GameObject {
     private RectHitbox rectHitbox = new RectHitbox();
@@ -21,6 +22,32 @@ public abstract class GameObject {
     final int RIGHT = -1;
     private int facing;
     private boolean moves = false;
+
+    //objects with one frame dont need these
+    private Animation anim = null;
+    private boolean animated;
+    private int animFps = 1;
+
+    public void setAnimFps(int animFps){
+        this.animFps = animFps;
+    }
+
+    public void setAnimFrameCount(int animFrameCount){
+        this.animFrameCount = animFrameCount;
+    }
+
+    public boolean isAnimated(){
+        return animated;
+    }
+
+    public void setAnimated(Context context, int pixelsPerMetre, boolean animated){
+        this.animated = animated;
+        this.anim = new Animation(context, bitmapName, height, width, animFps, animFrameCount,pixelsPerMetre);
+    }
+
+    public Rect getRectToDraw(long deltaTime){
+        return anim.getCurrentFrame(deltaTime, xVelocity, isMoves());
+    }
 
     void move(long fps){
         if(xVelocity !=0){
