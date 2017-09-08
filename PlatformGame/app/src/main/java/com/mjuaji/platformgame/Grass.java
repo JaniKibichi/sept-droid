@@ -11,6 +11,8 @@ public class Grass extends GameObject {
         setBitmapName("turf");
         //where the tile start, x&y locations from constructor parameters
         setWorldLocation(worldStartX, worldStartY, 0);
+        //hitbox to collide with
+        setRectHitbox();
     }
     public void update(long fps, float gravity){}
 }

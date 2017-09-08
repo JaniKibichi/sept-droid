@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public abstract class GameObject {
+    private RectHitbox rectHitbox = new RectHitbox();
     private Vector2Point5D worldLocation;
     private float width;
     private float height;
@@ -30,6 +31,7 @@ public abstract class GameObject {
             this.worldLocation.y += yVelocity/fps;
         }
     }
+
     public int getFacing(){
         return facing;
     }
@@ -137,5 +139,23 @@ public abstract class GameObject {
 
     public void setType(char type){
         this.type = type;
+    }
+
+    public void setRectHitbox(){
+        rectHitbox.setTop(worldLocation.y);
+        rectHitbox.setTop(worldLocation.x);
+        rectHitbox.setTop(worldLocation.y + height);
+        rectHitbox.setTop(worldLocation.x + width);
+    }
+
+    RectHitbox getHitbox(){
+        return rectHitbox;
+    }
+
+    public void setWorldLocationY(float y){
+        this.worldLocation.y = y;
+    }
+    public void setWorldLocationX(float x){
+        this.worldLocation.x = x;
     }
 }

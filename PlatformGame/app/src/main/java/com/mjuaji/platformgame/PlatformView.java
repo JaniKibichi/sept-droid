@@ -73,6 +73,24 @@ public class PlatformView extends SurfaceView implements Runnable {
                 } else {
                     //set visible flag to false so that draw() can ignore them
                     go.setVisible(false);
+                    //select all relevant objects and test for collisions
+                    int hit = lm.player.checkCollisions(go.getHitbox());
+                    if(hit>0){
+                        //collision, deal with different types
+                        switch(go.getType()){
+                            //a regular tile
+                            default:
+                                if(hit ==1){
+                                    lm.player.setxVelocity(0);
+                                    lm.player.setPressingRight(false);
+                                }
+
+                                if(hit==2){
+                                    lm.player.isFalling = false;
+                                }
+                                break;
+                        }
+                    }
                 }
             }
         }
@@ -159,6 +177,9 @@ public class PlatformView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
                 lm.switchPlayingStatus();
                 break;
+        }
+        if(lm != null){
+            ic.handleInput(motionEvent, lm, sm, vp);
         }
         return true;
     }
