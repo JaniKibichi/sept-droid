@@ -121,11 +121,15 @@ public class LevelManager{
                 break;
 
             case 'd':
-                index = 6;
+                index=6;
                 break;
 
             case 'g':
-                index = 7;
+                index=7;
+                break;
+
+            case 'f':
+                index=8;
                 break;
 
             default:
@@ -168,6 +172,10 @@ public class LevelManager{
 
             case 'g':
                 index = 7;
+                break;
+
+            case 'f':
+                index = 8;
                 break;
 
             default:
@@ -228,6 +236,11 @@ public class LevelManager{
                         case 'g':
                             //add a guard to the gameObjects
                             gameObjects.add(new Guard(context, j, i, c, pixelsPerMetre));
+                            break;
+
+                        case 'f':
+                            //add a fire tile the gameObjects
+                            gameObjects.add(new Fire (context, j, i, c, pixelsPerMetre));
                             break;
                     }
                     //if bitmap is not prepared

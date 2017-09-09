@@ -36,7 +36,6 @@ public class PlatformView extends SurfaceView implements Runnable {
     InputController ic;
     SoundManager sm;
     private PlayerState ps;
-
     public PlatformView(Context context, int screenWidth, int screenHeight) {
         super(context);
         this.context = context;
@@ -133,6 +132,16 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 location = new PointF(ps.loadLocation().x, ps.loadLocation().y);
                                 lm.player.setWorldLocationX(location.x);
                                 lm.player.setWorldLocationY(location.y);
+                                lm.player.setxVelocity(0);
+                                break;
+
+                            case 'f':
+                                //touched fire
+                                sm.playSound("player_burn");
+                                ps.loseLife();
+                                location = new PointF(ps.loadLocation().x, ps.loadLocation().y);
+                                lm.player.setWorldLocationX(location.x);
+                                lm.player.setWorldLocationX(location.y);
                                 lm.player.setxVelocity(0);
                                 break;
 
