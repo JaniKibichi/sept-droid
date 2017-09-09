@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 public abstract class GameObject {
+    private boolean traversable = false;
     private RectHitbox rectHitbox = new RectHitbox();
     private Vector2Point5D worldLocation;
     private float width;
@@ -184,5 +185,12 @@ public abstract class GameObject {
     }
     public void setWorldLocationX(float x){
         this.worldLocation.x = x;
+    }
+
+    public void setTraversable(){
+        traversable = true;
+    }
+    public boolean isTraversable(){
+        return traversable;
     }
 }

@@ -2,6 +2,8 @@ package com.mjuaji.platformgame;
 
 public class Grass extends GameObject {
     Grass(float worldStartX, float worldStartY, char type){
+        //make grass walkable;
+        setTraversable();
         final float HEIGHT = 1;
         final float WIDTH = 1;
         setHeight(HEIGHT);

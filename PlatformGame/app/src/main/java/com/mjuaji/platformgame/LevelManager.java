@@ -38,6 +38,57 @@ public class LevelManager{
         //ready to play
         //playing = true;
     }
+    public void setWaypoints(){
+        //loop through all game objects looking for guards
+        for(GameObject guard: this.gameObjects){
+            if(guard.getType()=='g'){
+                //set waypoint for this guard, find the tile beneath the guard
+                //this relies on the designer putting the guard in sensible lcoation
+                int startTileIndex = -1;
+                int startGuardIndex = 0;
+                float waypointX1 = -1;
+                float waypointX2 = -1;
+
+                for(GameObject tile : this.gameObjects){
+                    startTileIndex++;
+                    if(tile.getWorldLocation().y == guard.getWorldLocation().y+2){
+                        //tile is two spaces below current guard., see if has same coordinates
+                        if(tile.getWorldLocation().x == guard.getWorldLocation().x){
+                            //found the tile that the guard is "standing" on, go left as far as possible before traversable tile is found
+                            //either on guards row or tile row - upto max of 5 tiles.
+
+                            for(int i = 0; i<5; i++){//left for loop
+                                if(!gameObjects.get(startTileIndex - i).isTraversable()){
+                                    //set left waypoint
+                                    waypointX1 = gameObjects.get(startTileIndex - (i+1)).getWorldLocation().x;
+                                    break; //leave for loop
+                                }else {
+                                    //set to max 5 tiles as non traversible tile found
+                                    waypointX1 = gameObjects.get(startTileIndex - 5).getWorldLocation().x;
+                                }
+                            }
+
+                            for(int i = 0; i<5; i++){//right for loop
+                                if(!gameObjects.get(startTileIndex + i).isTraversable()){
+                                    //set right waypoint
+                                    waypointX2 = gameObjects.get(startTileIndex + (i-1)).getWorldLocation().x;
+                                    break; //leave for loop
+                                }else {
+                                    //set to max 5 tiles as non traversible tile found
+                                    waypointX2 = gameObjects.get(startTileIndex + 5).getWorldLocation().x;
+                                }
+                            }
+
+                            Guard g = (Guard) guard;
+                            g.setWaypoints(waypointX1, waypointX2);
+
+                        }
+                    }
+                }
+
+            }
+        }
+    }
     public boolean isPlaying(){
         return playing;
     }
@@ -67,6 +118,14 @@ public class LevelManager{
 
             case 'e':
                 index=5;
+                break;
+
+            case 'd':
+                index = 6;
+                break;
+
+            case 'g':
+                index = 7;
                 break;
 
             default:
@@ -101,6 +160,14 @@ public class LevelManager{
 
             case 'e':
                 index=5;
+                break;
+
+            case 'd':
+                index = 6;
+                break;
+
+            case 'g':
+                index = 7;
                 break;
 
             default:
@@ -151,6 +218,16 @@ public class LevelManager{
                         case 'e':
                             //add an extra life to the gameObjects
                             gameObjects.add(new ExtraLife(j,i,c));
+                            break;
+
+                        case 'd':
+                            //Add a drone to the gameObjects
+                            gameObjects.add(new Drone(j,i,c));
+                            break;
+
+                        case 'g':
+                            //add a guard to the gameObjects
+                            gameObjects.add(new Guard(context, j, i, c, pixelsPerMetre));
                             break;
                     }
                     //if bitmap is not prepared

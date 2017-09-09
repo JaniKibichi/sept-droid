@@ -73,15 +73,9 @@ public class PlatformView extends SurfaceView implements Runnable {
                     //set visible flag to true
                     go.setVisible(true);
 
-                    if(lm.isPlaying()){
-                        //run unclipped updates
-                        go.update(fps, lm.gravity);
-                    }
-                } else {
-                    //set visible flag to false so that draw() can ignore them
-                    go.setVisible(false);
                     //select all relevant objects and test for collisions
                     int hit = lm.player.checkCollisions(go.getHitbox());
+
                     if(hit>0){
                         //collision, deal with different types
                         switch(go.getType()){
@@ -120,6 +114,18 @@ public class PlatformView extends SurfaceView implements Runnable {
                                     lm.player.restorePreviousVelocity();
                                 }
                                 break;
+
+                            case 'd':
+                                PointF location;
+                                //hit by drone
+                                sm.playSound("player_burn");
+                                ps.loseLife();
+                                location = new PointF(ps.loadLocation().x, ps.loadLocation().y);
+                                lm.player.setWorldLocationX(location.x);
+                                lm.player.setWorldLocationY(location.y);
+                                lm.player.setxVelocity(0);
+                                break;
+
                             //a regular tile
                             default:
                                 if(hit ==1){
@@ -133,6 +139,18 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 break;
                         }
                     }
+                    if(lm.isPlaying()){
+                        //run unclipped updates
+                        go.update(fps, lm.gravity);
+                        if(go.getType() =='d'){
+                            //let any near by drones know where the player is
+                            Drone d = (Drone) go;
+                            d.setWaypoint(lm.player.getWorldLocation());
+                        }
+                    }
+                } else {
+                    //set visible flag to false so that draw() can ignore them
+                    go.setVisible(false);
                 }
             }
         }
