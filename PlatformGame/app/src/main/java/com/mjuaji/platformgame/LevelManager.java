@@ -18,7 +18,8 @@ public class LevelManager{
     ArrayList<GameObject> gameObjects;
     ArrayList<Rect> currentButtons;
     Bitmap[] bitmapsArray;
-    public LevelManager(Context context, int pixelsPerMetre, int screenWidth, InputController ic, String level, float px, float py){
+
+    LevelManager(Context context, int pixelsPerMetre, int screenWidth, InputController ic, String level, float px, float py){
         this.level = level;
         switch(level){
             case "LevelCave":
@@ -28,13 +29,12 @@ public class LevelManager{
         }
         //arrays ->where to hold all our GameObjects
         gameObjects = new ArrayList<>();
-
         //arrays ->to hold 1 of every Bitmap
         bitmapsArray = new Bitmap[25];
-
         //load all the GameObjects and Bitmaps
         loadMapData(context, pixelsPerMetre, px, py);
-
+        //set waypoints for our guards
+        setWaypoints();
         //ready to play
         //playing = true;
     }

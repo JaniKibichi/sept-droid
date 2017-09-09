@@ -31,14 +31,12 @@ public class PlatformActivity extends AppCompatActivity {
         setContentView(platformView);
 
     }
-
     //pause the thread when the activity is paused
     @Override
     protected void onPause(){
         super.onPause();
         platformView.pause();
     }
-
     //if the activity is resumed, resume our thread
     @Override
     protected void onResume(){
