@@ -85,6 +85,41 @@ public class PlatformView extends SurfaceView implements Runnable {
                     if(hit>0){
                         //collision, deal with different types
                         switch(go.getType()){
+                            //handle collisions for each pickup
+                            case 'c':
+                                sm.playSound("coin_pickup");
+                                go.setActive(false);
+                                go.setVisible(false);
+                                ps.gotCredit();
+                                //restore state removed ny collision detection
+                                if(hit !=2){
+                                    lm.player.restorePreviousVelocity();
+                                }
+                                break;
+
+
+                            case 'u':
+                                sm.playSound("gun_upgrade");
+                                go.setActive(false);
+                                go.setVisible(false);
+                                lm.player.bfg.upgradeRateOfFire();
+                                ps.increaseFireRate();
+                                //restore state removed by collision detection
+                                if(hit !=2){
+                                    lm.player.restorePreviousVelocity();
+                                }
+                                break;
+
+                            case 'e':
+                                sm.playSound("extra_life");
+                                go.setActive(false);
+                                go.setVisible(false);
+                                ps.addLife();
+                                //restore state removed by collision detection
+                                if(hit !=2){
+                                    lm.player.restorePreviousVelocity();
+                                }
+                                break;
                             //a regular tile
                             default:
                                 if(hit ==1){

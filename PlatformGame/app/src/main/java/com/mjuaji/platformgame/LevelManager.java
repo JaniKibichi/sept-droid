@@ -57,6 +57,18 @@ public class LevelManager{
                 index=2;
                 break;
 
+            case 'c':
+                index=3;
+                break;
+
+            case 'u':
+                index=4;
+                break;
+
+            case 'e':
+                index=5;
+                break;
+
             default:
                 index=0;
                 break;
@@ -77,6 +89,18 @@ public class LevelManager{
 
             case 'p':
                 index =0;
+                break;
+
+            case 'c':
+                index=3;
+                break;
+
+            case 'u':
+                index=4;
+                break;
+
+            case 'e':
+                index=5;
                 break;
 
             default:
@@ -112,6 +136,21 @@ public class LevelManager{
                             //get the index of the player
                             playerIndex = currentIndex;
                             player = (Player) gameObjects.get(playerIndex);
+                            break;
+
+                        case 'c':
+                            //add a coin to the gameObjects
+                            gameObjects.add(new Coin(j,i,c));
+                            break;
+
+                        case 'u':
+                            //add a machine gun upgrade to the gameObjects
+                            gameObjects.add(new MachineGunUpgrade(j,i,c));
+                            break;
+
+                        case 'e':
+                            //add an extra life to the gameObjects
+                            gameObjects.add(new ExtraLife(j,i,c));
                             break;
                     }
                     //if bitmap is not prepared
