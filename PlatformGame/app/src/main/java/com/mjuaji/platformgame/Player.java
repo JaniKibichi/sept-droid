@@ -16,6 +16,8 @@ public class Player extends GameObject {
     private long jumpTime;
     private long maxJumpTime = 700;
 
+    public MachineGun bfg;
+
     public Player(Context context, float worldStartX, float worldStartY, int pixelPerMetre) {
         //standing still to start with
         setxVelocity(0);
@@ -47,9 +49,10 @@ public class Player extends GameObject {
         rectHitboxLeft = new RectHitbox();
         rectHitboxHead = new RectHitbox();
         rectHitboxFeet = new RectHitbox();
+        //initialize gun
+        bfg = new MachineGun();
     }
     public void update(long fps, float gravity){
-
         if(isPressingRight){
             this.setxVelocity(MAX_X_VELOCITY);
         }else if (isPressingLeft){
@@ -57,7 +60,6 @@ public class Player extends GameObject {
         }else{
             this.setxVelocity(0);
         }
-
         //which way the player is facing
         if(this.getxVelocity()>0){
         //facing right
@@ -66,7 +68,6 @@ public class Player extends GameObject {
         //facing left
             setFacing(LEFT);
         }
-
         //jumping and gravity
         if(isJumping){
             long timeJumping = System.currentTimeMillis() - jumpTime;
@@ -86,6 +87,8 @@ public class Player extends GameObject {
             //making it easier, comment isFalling
             isFalling = true;
         }
+        //update for gun
+        bfg.update(fps, gravity);
         //update x and y coordinates if they have changed
         this.move(fps);
         //update hitboxes, get current world location, save as local variables
@@ -164,6 +167,10 @@ public class Player extends GameObject {
                 sm.playSound("jump");
             }
         }
+    }
+    public boolean pullTrigger(){
+        //Try and fire a shot
+        return bfg.shoot(this.getWorldLocation().x, this.getWorldLocation().y, getFacing(), getHeight());
     }
 
 }
