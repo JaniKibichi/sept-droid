@@ -149,6 +149,36 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 break;
                         }
                     }
+
+                    //check bullet collisions
+                    for(int i = 0; i<lm.player.bfg.getNumBullets(); i++){
+                        //make a hitbox out of the current bullet
+                        RectHitbox r = new RectHitbox();
+
+                        r.setLeft(lm.player.bfg.getBulletX(i));
+                        r.setTop(lm.player.bfg.getBulletY(i));
+                        r.setRight(lm.player.bfg.getBulletX(i)+.1f);
+                        r.setBottom(lm.player.bfg.getBulletY(i)+.1f);
+
+                        if(go.getHitbox().intersects(r)){
+                            //Collision detected, maje bullet disappear until it is respawned
+                            lm.player.bfg.hideBullet(i);
+                            //respond depending on object hit
+                            if(go.getType() !='g' && go.getType() != 'd'){
+                                sm.playSound("ricochet");
+                            }else if (go.getType() == 'g'){
+                                //knock the guard back
+                                go.setWorldLocationX(go.getWorldLocation().x+2*(lm.player.bfg.getDirection(i)));
+                                sm.playSound("hit_guard");
+                            }else if (go.getType() =='d'){
+                                //destroy the droid
+                                sm.playSound("explode");
+                                //permanently clip this drone
+                                go.setWorldLocation(-100, -100, 0);
+                            }
+                        }
+                    }
+
                     if(lm.isPlaying()){
                         //run unclipped updates
                         go.update(fps, lm.gravity);
