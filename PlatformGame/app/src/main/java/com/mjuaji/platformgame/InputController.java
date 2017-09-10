@@ -106,9 +106,16 @@ public class InputController {
                 //not playing, move the viewport around to explore the map
                 switch(motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        if (pause.contains(x, y)) {
+                        if(right.contains(x,y)){
+                            vp.moveViewportRight(l.mapWidth);
+                        }else if(left.contains(x,y)){
+                            vp.moveViewportLeft();
+                        }else if (jump.contains(x,y)){
+                            vp.moveViewportUp();
+                        }else if (shoot.contains(x,y)){
+                            vp.moveViewportDown(l.mapHeight);
+                        }else if (pause.contains(x,y)){
                             l.switchPlayingStatus();
-                            //Log.w("pause:", "DOWN");
                         }
                         break;
                 }

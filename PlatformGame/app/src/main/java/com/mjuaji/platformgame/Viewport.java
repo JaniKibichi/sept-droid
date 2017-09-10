@@ -94,6 +94,31 @@ public class Viewport {
         return clipped;
     }
 
+    public void moveViewportRight(int maxWidth){
+        if(currentViewportWorldCentre.x < maxWidth - (metresToShowX/2)+3){
+            currentViewportWorldCentre.x +=1;
+        }
+    }
+
+    public void moveViewportLeft(){
+        if(currentViewportWorldCentre.x > (metresToShowX/2)-3){
+            currentViewportWorldCentre.x -=1;
+        }
+    }
+
+    public void moveViewportUp(){
+        if(currentViewportWorldCentre.y > (metresToShowY/2)-3){
+            currentViewportWorldCentre.y -=1;
+        }
+    }
+
+    public void moveViewportDown(int maxHeight){
+        if(currentViewportWorldCentre.y < maxHeight - (metresToShowY/2)+3){
+            currentViewportWorldCentre.y +=1;
+        }
+    }
+
+
     public int getNumClipped(){
         return numClipped;
     }
