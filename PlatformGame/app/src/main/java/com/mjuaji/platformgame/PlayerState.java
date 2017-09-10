@@ -43,6 +43,10 @@ public class PlayerState{
         numCredits++;
     }
 
+    public int getCredits(){
+        return numCredits;
+    }
+
     public void loseLife(){
         lives--;
     }

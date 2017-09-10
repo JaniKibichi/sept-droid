@@ -286,6 +286,28 @@ public class PlatformView extends SurfaceView implements Runnable {
             //draw parallax background from 1 to 3
             drawBackground(4,0);
 
+            //draw Heads Up Display, the code needs bitmaps: extra life, upgrade & coin, one of each in the level
+            int topSpace = vp.getPixelsPerMetreY()/4;
+
+            int iconSize = vp.getPixelsPerMetreX();
+            int padding = vp.getPixelsPerMetreX()/5;
+            int centring = vp.getPixelsPerMetreY()/6;
+            paint.setTextSize(vp.getPixelsPerMetreY()/2);
+            paint.setTextAlign(Paint.Align.CENTER);
+
+            paint.setColor(Color.argb(100,0,0,0));
+            canvas.drawRect(0,0,iconSize*7.0f, topSpace*2+iconSize, paint);
+            paint.setColor(Color.argb(255,255,255,0));
+
+            canvas.drawBitmap(lm.getBitmap('e'), 0, topSpace, paint);
+            canvas.drawText(""+ps.getLives(), (iconSize*1)+padding, (iconSize) - centring, paint);
+
+            canvas.drawBitmap(lm.getBitmap('c'), (iconSize*2.5f)+ padding, topSpace,paint);
+            canvas.drawText(""+ ps.getCredits(), (iconSize*3.5f)+ padding *2, (iconSize) - centring,paint);
+
+            canvas.drawBitmap(lm.getBitmap('u'), (iconSize*5.0f)+ padding, topSpace, paint);
+            canvas.drawText(""+ ps.getFireRate(), (iconSize*6.0f)+ padding *2, (iconSize) - centring,paint);
+
             //text for debugging
             if(debugging) {
                 paint.setTextSize(16);
