@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public class LevelData {
     ArrayList<String> tiles;
+    ArrayList<BackgroundData> backgroundDataList;
+
+
 
     //tile types
     // . = not tile

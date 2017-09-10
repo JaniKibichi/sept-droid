@@ -16,6 +16,7 @@ public class LevelManager{
     float gravity;
     LevelData levelData;
     ArrayList<GameObject> gameObjects;
+    ArrayList<Background>backgrounds;
     ArrayList<Rect> currentButtons;
     Bitmap[] bitmapsArray;
 
@@ -156,6 +157,35 @@ public class LevelManager{
                 index = 14;
                 break;
 
+            case 'w':
+                index=15;
+                break;
+
+            case 'x':
+                index=16;
+                break;
+
+            case 'l':
+                index=17;
+                break;
+
+            case 'r':
+                index=18;
+                break;
+
+            case 's':
+                index=19;
+                break;
+
+            case 'm':
+                index=20;
+                break;
+
+            case 'z':
+                index=21;
+                break;
+
+
             default:
                 index=0;
                 break;
@@ -225,6 +255,35 @@ public class LevelManager{
             case '7':
                 index = 14;
                 break;
+
+            case 'w':
+                index=15;
+                break;
+
+            case 'x':
+                index=16;
+                break;
+
+            case 'l':
+                index=17;
+                break;
+
+            case 'r':
+                index=18;
+                break;
+
+            case 's':
+                index=19;
+                break;
+
+            case 'm':
+                index=20;
+                break;
+
+            case 'z':
+                index=21;
+                break;
+
 
             default:
                 index =0;
@@ -320,6 +379,42 @@ public class LevelManager{
                             //tile to the gameObjects
                             gameObjects.add(new Stone(j,i,c));
                             break;
+
+                        case 'w':
+                            //add a tree to the gameobjects
+                            gameObjects.add(new Tree(j,i,c));
+                            break;
+
+                        case 'x':
+                            //add a tree2  to the gameobjects
+                            gameObjects.add(new Tree2(j,i,c));
+                            break;
+
+                        case 'l':
+                            //add a lampost to the gameobjects
+                            gameObjects.add(new Lampost(j,i,c));
+                            break;
+
+                        case 'r':
+                            //add a stalactite to the gameobjects
+                            gameObjects.add(new Stalactite(j,i,c));
+                            break;
+
+                        case 's':
+                            //add a stalagmite to the gameobjects
+                            gameObjects.add(new Stalagmite(j,i,c));
+                            break;
+
+                        case 'm':
+                            //add a cart to the gameobjects
+                            gameObjects.add(new Cart(j,i,c));
+                            break;
+
+                        case 'z':
+                            //add a boulder to the gameobjects
+                            gameObjects.add(new Boulders(j,i,c));
+                            break;
+
                     }
                     //if bitmap is not prepared
                     if(bitmapsArray[getBitmapIndex(c)]==null){
@@ -336,6 +431,13 @@ public class LevelManager{
             gravity = 6;
         }else{
             gravity = 0;
+        }
+    }
+    private void loadBackgrounds(Context context, int pixelsPerMetre, int screenWidth){
+        backgrounds = new ArrayList<Background>();
+        //load background data into background objects & place them in our GamneObject arraylist
+        for(BackgroundData bgData: levelData.backgroundDataList){
+            backgrounds.add(new Background(context, pixelsPerMetre, screenWidth, bgData));
         }
     }
 }

@@ -218,6 +218,9 @@ public class PlatformView extends SurfaceView implements Runnable {
             paint.setColor(Color.argb(255,0,0,255));
             canvas.drawColor(Color.argb(255,0,0,255));
 
+            //draw parallax background -1 to -3
+            drawBackground(0,-3);
+
             //draw all GameObjects
             Rect toScreen2d = new Rect();
 
@@ -256,6 +259,9 @@ public class PlatformView extends SurfaceView implements Runnable {
                 toScreen2d.set(vp.worldToScreen(lm.player.bfg.getBulletX(i), lm.player.bfg.getBulletY(i), .25f, .05f));
                 canvas.drawRect(toScreen2d, paint);
             }
+
+            //draw parallax background from 1 to 3
+            drawBackground(4,0);
 
             //text for debugging
             if(debugging) {
@@ -325,6 +331,50 @@ public class PlatformView extends SurfaceView implements Runnable {
 
         //set players location as the world centre
         vp.setWorldCentre(lm.gameObjects.get(lm.playerIndex).getWorldLocation().x,lm.gameObjects.get(lm.playerIndex).getWorldLocation().y);
+    }
+    //draw the background
+    private void drawBackground(int start, int stop){
+        Rect fromRect1 = new Rect();
+        Rect toRect1 = new Rect();
+        Rect fromRect2 = new Rect();
+        Rect toRect2 = new Rect();
+        for(Background bg : lm.backgrounds){
+            if(bg.z < start && bg.z > stop){
+                //is this layer in the viewport? clip anything off-screen
+                if(!vp.clipObjects(-1, bg.y, 1000, bg.height)){
+
+                    float floatstartY = ((vp.getyCentre() - ((vp.getViewportWorldCentreY() - bg.y)*vp.getPixelsPerMetreY())));
+                    int startY = (int) floatstartY;
+
+                    float floatendY = ((vp.getyCentre()-((vp.getViewportWorldCentreY() - bg.endY)*vp.getPixelsPerMetreY())));
+                    int endY = (int) floatendY;
+
+                    //define portion of bitmaps to capture and the coordinates to draw them at
+                    fromRect1 = new Rect(0,0, bg.width - bg.xClip, bg.height);
+                    toRect1 = new Rect(bg.width - bg.xClip, 0, bg.width, bg.height);
+
+                    fromRect2 = new Rect(bg.width - bg.xClip,0, bg.width, bg.height);
+                    toRect2 = new Rect(0, startY,bg.xClip,endY);
+                }
+                //draw backgrounds
+                if(!bg.reversedFirst){
+                    canvas.drawBitmap(bg.bitmap, fromRect1, toRect1, paint);
+                    canvas.drawBitmap(bg.bitmapReversed, fromRect2, toRect2, paint);
+                }else{
+                    canvas.drawBitmap(bg.bitmapReversed, fromRect1, toRect1, paint);
+                    canvas.drawBitmap(bg.bitmap, fromRect2, toRect2, paint);
+                }
+                //calculate next value for backgrounds clipping position by modifying xClip, switching background thats drawn 1st
+                bg.xClip -= lm.player.getxVelocity()/(20/bg.speed);
+                if(bg.xClip>=bg.width){
+                    bg.xClip = 0;
+                    bg.reversedFirst = !bg.reversedFirst;
+                }else if(bg.xClip<=0){
+                    bg.xClip = bg.width;
+                    bg.reversedFirst = !bg.reversedFirst;
+                }
+            }
+        }
     }
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent){
