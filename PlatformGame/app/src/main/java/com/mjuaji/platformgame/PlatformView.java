@@ -48,7 +48,7 @@ public class PlatformView extends SurfaceView implements Runnable {
         sm.loadSound(context);
         ps = new PlayerState();
         //load the first level
-        loadLevel("LevelCave",15,2);
+        loadLevel("LevelCave",1,16);
     }
     @Override
     public void run() {
@@ -145,6 +145,14 @@ public class PlatformView extends SurfaceView implements Runnable {
                                 lm.player.setxVelocity(0);
                                 break;
 
+                            case 't':
+                                //touched teleport door
+                                Teleport teleport = (Teleport) go;
+                                Location t = teleport.getTarget();
+                                loadLevel(t.level, t.x, t.y);
+                                sm.playSound("teleport");
+                                break;
+
                             //a regular tile
                             default:
                                 if(hit ==1){
@@ -207,6 +215,21 @@ public class PlatformView extends SurfaceView implements Runnable {
         if(lm.isPlaying()){
             //reset player location
             vp.setWorldCentre(lm.gameObjects.get(lm.playerIndex).getWorldLocation().x, lm.gameObjects.get(lm.playerIndex).getWorldLocation().y);
+//Has player fallen out of the map?
+            if(lm.player.getWorldLocation().x < 0 || lm.player.getWorldLocation().x > lm.mapWidth || lm.player.getWorldLocation().y > lm.mapHeight){
+                sm.playSound("player_burn");
+                ps.loseLife();
+                PointF location = new PointF(ps.loadLocation().x, ps.loadLocation().y);
+                lm.player.setWorldLocationX(location.x);
+                lm.player.setWorldLocationY(location.y);
+                lm.player.setxVelocity(0);
+            }
+
+//check if the game is over
+            if(ps.getLives() ==0){
+                ps = new PlayerState();
+                loadLevel("LevelCave", 1, 16);
+            }
         }
     }
     private void draw(){
@@ -328,6 +351,9 @@ public class PlatformView extends SurfaceView implements Runnable {
         //save location for respawning
         PointF location = new PointF(px, py);
         ps.saveLocation(location);
+
+        //on level load, reload Player, MachineGun, Bullet from PlayerState
+        lm.player.bfg.setFireRate(ps.getFireRate());
 
         //set players location as the world centre
         vp.setWorldCentre(lm.gameObjects.get(lm.playerIndex).getWorldLocation().x,lm.gameObjects.get(lm.playerIndex).getWorldLocation().y);

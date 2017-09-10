@@ -27,6 +27,17 @@ public class LevelManager{
                 levelData = new LevelCave();
                 break;
             //add extra levels here
+            case "LevelCity":
+                levelData = new LevelCity();
+                break;
+
+            case "LevelForest":
+                levelData = new LevelForest();
+                break;
+
+            case "LevelMountain":
+                levelData = new LevelMountain();
+                break;
         }
         //arrays ->where to hold all our GameObjects
         gameObjects = new ArrayList<>();
@@ -185,6 +196,10 @@ public class LevelManager{
                 index=21;
                 break;
 
+            case 't':
+                index = 22;
+                break;
+
 
             default:
                 index=0;
@@ -284,6 +299,10 @@ public class LevelManager{
                 index=21;
                 break;
 
+            case 't':
+                index = 22;
+                break;
+
 
             default:
                 index =0;
@@ -296,6 +315,8 @@ public class LevelManager{
         char c;
         //keep track of where we load our game objects
         int currentIndex = -1;
+        int teleportIndex = -1;
+
         //viewport needs to know how wide/high is the map.
         mapHeight = levelData.tiles.size();
         mapWidth = levelData.tiles.get(0).length();
@@ -413,6 +434,13 @@ public class LevelManager{
                         case 'z':
                             //add a boulder to the gameobjects
                             gameObjects.add(new Boulders(j,i,c));
+                            break;
+
+                        case 't':
+                            //add a teleport to the gameObjects
+                            teleportIndex++;
+                            gameObjects.add(new Teleport(j, i, c, levelData.locations.get(teleportIndex)));
+                            levelData.locations.get(teleportIndex);
                             break;
 
                     }
